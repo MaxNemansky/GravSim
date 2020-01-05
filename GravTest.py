@@ -9,17 +9,17 @@ window = pygame.display.set_mode((600, 600))
 
 clock = pygame.time
 
-timeSurp = 10 # Doba mezi cykly v milisekundách
-gravConst = 1 # Gravitační konstanta
+timeSurp = 10
+gravConst = 1
 
 class Body:
     def __init__(self, loc, mass, vel, a, aVec, color):
-        self.loc = loc # Array in the format (x possition, y possition)
-        self.mass = mass # Body mass - NOT IN KG - Take size of gravConst into consideration
-        self.vel = vel # Array in the format (x component of the velocity vector, y component of the velocity vector)
-        self.a = a # Absolute value of acceleration
-        self.aVec = aVec # Array in the format (x component of the acceleration vector, y component of the acceleration vector)
-        self.color = color # Color of the body, has no effect on the simulation itself, should be passed as an array
+        self.loc = loc
+        self.mass = mass
+        self.vel = vel
+        self.a = a
+        self.aVec = aVec
+        self.color = color
     def setLoc(self, loc):
         self.loc = loc
     def setMass(self, mass):
@@ -33,20 +33,20 @@ class Body:
     def setColor(self, color):
         self.color = color
 
-class GravCalc: # Gravity calculation class, the core of the simulation
+class GravCalc:
     def __init__(self, bodies):
         self.bodies = bodies
     def calcPosition(self, body):
         for bo in self.bodies:
             if body == bo:
-                pass # Check if second body isn't first body
+                pass
             else:
-                body.setA(bo.mass*gravConst/(math.pow(bo.loc[0]-body.loc[0],2)+math.pow(bo.loc[1]-body.loc[1],2))) # Absolutní hodnota zrychlení
+                body.setA(bo.mass*gravConst/(math.pow(bo.loc[0]-body.loc[0],2)+math.pow(bo.loc[1]-body.loc[1],2)))
                 cosAlpha = ((bo.loc[0]-body.loc[0])/(math.sqrt(math.pow(bo.loc[0]-body.loc[0],2)+math.pow(bo.loc[1]-body.loc[1],2))))
                 sinAlpha = ((bo.loc[1]-body.loc[1])/(math.sqrt(math.pow(bo.loc[0]-body.loc[0],2)+math.pow(bo.loc[1]-body.loc[1],2))))
-                body.setAVec((cosAlpha*body.a, sinAlpha*body.a)) # Compute acceleration vector components
-                body.setVel((body.vel[0] + body.aVec[0], body.vel[1] + body.aVec[1])) # Compute velocity vector components
-        body.setLoc((body.loc[0] + body.vel[0], body.loc[1] + body.vel[1])) # Set new body location
+                body.setAVec((cosAlpha*body.a, sinAlpha*body.a))
+                body.setVel((body.vel[0] + body.aVec[0], body.vel[1] + body.aVec[1]))
+        body.setLoc((body.loc[0] + body.vel[0], body.loc[1] + body.vel[1]))
         return body.loc
 
 
@@ -62,8 +62,8 @@ while True:
     window.fill((255, 255, 255))
     
     for body in bodyArray:
-        loc = calc.calcPosition(body) # Calculate new values for body properties
-        pygame.draw.circle(window, body.color, (int(body.loc[0]), int(body.loc[1])), 10, 0) # Draw body
+        loc = calc.calcPosition(body)
+        pygame.draw.circle(window, body.color, (int(body.loc[0]), int(body.loc[1])), 10, 0)
     
     for event in GAME_EVENTS.get():
         if event.type == GAME_GLOBALS.QUIT:
